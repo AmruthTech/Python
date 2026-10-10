@@ -329,31 +329,165 @@
 
 
 
-# Part 4 — Local and Global Variables
-# 31. Create a global variable:
+# # Part 4 — Local and Global Variables
+# # 31. Create a global variable:
 # tax_rate = 0.18
-# Create a function that uses it to calculate tax on a given amount.
+# # Create a function that uses it to calculate tax on a given amount.
+# def calculate_tax(amount):
+#     tax = amount * tax_rate
+#     return tax
+# tax_amt = calculate_tax(1000)
+# print(tax_amt)
 
-# 32. Create a function where a variable is defined inside the function. Try to access it outside the function.
+# # 32. Create a function where a variable is defined inside the function. Try to access it outside the function.
+# # Observe what happens and explain why.
+# def my_function():
+#     local_var = "I am local"
+#     print(local_var)
+# my_function()  # This will raise a NameError because local_var is not defined outside the function.
 
-# Observe what happens and explain why.
-
-# 33. Create:
+# # 33. Create:
 # count = 0
+# # Then write a function that attempts to increment count.
+# # Understand why the behavior is different from modifying a local variable.
+# def increment_count(count):
+#     for i in range(5):
+#         count += 1  # This will raise an UnboundLocalError because count is being referenced before assignment.
+#     return count
+# print(increment_count(count))  # Uncommenting this line will raise an error.
 
-# Then write a function that attempts to increment count.
+# # 34. Create a global counter and a function that modifies it using the global keyword.
+# # Use this only to understand how global state works.
+# def increment_global_count():
+#     global count
+#     for i in range(5):
+#         count += 1
+#     return count
+# print(increment_global_count())  # This will correctly increment the global count variable.
 
-# Understand why the behavior is different from modifying a local variable.
+# # 35. Write a program demonstrating the difference between:
+# # local variable
+# # global variable
+# # parameter
+# # Your program should contain examples of all three.
+# # The objective here isn't to build something useful. It's to understand scope.
+# def local_variable_example():
+#     local_var = "I am a local variable"
+#     print(local_var)
+# def global_variable_example():
+#     global global_var
+#     global_var = "I am a global variable"
+#     print(global_var)
+# def parameter_example(param):
+#     print(f"I am a parameter with value: {param}")
+# local_variable_example()
+# global_variable_example()
+# parameter_example("Hello")
 
-# 34. Create a global counter and a function that modifies it using the global keyword.
 
-# Use this only to understand how global state works.
+# # Part 5 — Lambda Functions
+# # 36. Create a lambda function that calculates the square of a number.
+# sq = lambda a: a**2
+# print(sq(5))
 
-# 35. Write a program demonstrating the difference between:
-# local variable
-# global variable
-# parameter
+# # 37. Create a lambda function that checks whether a number is even.
+# even = lambda a: a % 2 == 0
+# print(even(4))
 
-# Your program should contain examples of all three.
+# # 38. Create a lambda function that returns the larger of two numbers.
+# large = lambda a,b: a if a > b else b
+# print(large(4, 7))
 
-# The objective here isn't to build something useful. It's to understand scope.
+# # 39. Given:
+# numbers = [1, 2, 3, 4, 5, 6]
+# # Use filter() with a lambda to obtain only even numbers.
+# even = list(filter(lambda x: x % 2 == 0, numbers))
+# print(even)
+
+# # 40. Given:
+# numbers = [1, 2, 3, 4, 5]
+# # Use map() with a lambda to create a list of squares.
+# squares = list(map(lambda x: x**2, numbers))
+# print(squares)
+
+# # 41. Given:
+# students = [
+#     {"name": "Rahul", "average": 82},
+#     {"name": "Priya", "average": 91},
+#     {"name": "Amit", "average": 76}
+# ]
+# # Use sorted() with a lambda to sort students by average.
+# order = sorted(students, key = lambda x: x["average"])
+# print(order)
+# averages = list(map(lambda x: {**x, "average": x["average"] - 100}, students))
+# print(averages)
+
+# # 42. Sort the same students by name using a lambda function.
+# names = sorted(students, key = lambda x: x["name"])
+# print(names)
+
+
+
+# # Part 6 — Recursion
+# # 43. Write a recursive function to calculate factorial.
+# def fact(num):
+#     if num == 0 or num == 1:
+#         return 1
+#     else:
+#         return num * fact(num - 1)
+# result = fact(5)
+# print(result)
+
+# # 44. Write a recursive function that calculates the sum of numbers from 1 to n.
+# def sum(num):
+#     if num == 0:
+#         return 0
+#     else:
+#         return num + sum(num - 1)
+# print(sum(10))
+
+# # # 45. Write a recursive function to calculate the power:
+# # # 2^5 = 32
+# def power(num, pow):
+#     if pow == 0:
+#         return 1
+#     else:
+#         return num * power(num, pow - 1)
+# print(power(2, 5))
+
+# # 46. Write a recursive function to reverse a string.
+# def reverse_string(s):
+#     if len(s) == 0:
+#         return s
+#     else:
+#         return s[-1] + reverse_string(s[:-1])
+# print(reverse_string("hello"))
+
+# # 47. Write a recursive function to calculate the nth Fibonacci number.
+# def fibonacci(n):
+#     if n <= 0:
+#         return 0
+#     elif n == 1:
+#         return 1
+#     else:
+#         return fibonacci(n - 1) + fibonacci(n - 2)
+# print(fibonacci(10))  # Output: 55
+
+# # 48. Write a recursive function that counts down from n to 1.
+# # For example:
+# # 5
+# # 4
+# # 3
+# # 2
+# # 1
+# def nums(num):
+#     if num == 1:
+#         return 1
+#     else:
+#         print(num)
+#         return nums(num - 1)
+# print(nums(5))
+# # For these problems, pay attention to two things:
+# # Base case
+# # Recursive case
+# # If you cannot clearly identify both, you don't yet understand the recursion problem.

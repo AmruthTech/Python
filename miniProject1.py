@@ -20,22 +20,22 @@ n = int(input("How many student: "))
 # Store the information using lists.
 Students = {}
 for _ in range(n):
-    key = input("enter Student ID: ")
+    key = input("enter Student ID: ").title().strip()
     val_len = int(input("Enter how many values: "))
     if val_len > 0:
         Students[key] = {}
         for _ in range(val_len):
-            key1 = input("enter key: ").title()
+            key1 = input("enter key: ").title().strip()
             val = int(input("Enter how many values: "))
             if val > 0:
                 if val == 1 and (key1 == "Course" or key1 == "course"):
-                    Students[key][key1] = list(map(str, input("Courses: ").title().split()))
+                    Students[key][key1] = list(map(str, input("Courses: ").title().split(",")))
                 elif val == 1:
-                    Students[key][key1] = input(f"enter {key1} value: ").title()
+                    Students[key][key1] = input(f"enter {key1} value: ").title().strip()
                 else:
                     Students[key][key1] = {}
                     for _ in range(val):
-                        key2 = input("Enter key: ")
+                        key2 = input("Enter key: ").title().strip()
                         Students[key][key1][key2] = int(input(f"Enter {key2} value: "))
 
 # Students["Totals"] = 100
@@ -64,15 +64,302 @@ for i in Students.keys():
     else:
         Students[i]["Status"] = "PASS"
 
+cities = set()
+for id in Students:
+#     for city in Students[id]["City"]:
+    if Students[id]["City"] not in cities:
+        cities.add(Students[id]["City"])
+print("Cities: ", cities)
+
+
+courses = set()
+for id in Students:
+    for cour in Students[id]["Course"]:
+        if cour not in courses:
+            courses.add(cour)
+print("Courses: ", courses)
+
+subjects = []
+for id in Students:
+    for marks in Students[id]:
+        for subs in Students[id]["Marks"]:
+            subjects.append(subs)
+        break
+    break
+subjects = tuple(list(subjects))
+print("Subjects: ", subjects)
+
+grade = []
+for id in Students:
+    if Students[id]["Grades"] in "ABCDF":
+        grade.append(Students[id]["Grades"])
+grades = tuple(grade)
+print("Grades: ", grades)
+
+while True:
+    choice = input("Enter Operation to execute(Display/ Search/ Update/ Add/ Delete: ").title().strip()
+    if choice == "Display":
+        print("================================")
+        print("STUDENT DETAILS")
+        print("================================")
+        for i in Students:
+            print(f"ID: {i}")
+            for j in Students[i]:
+                if isinstance(Students[i][j], (str, int, float)):
+                    print(f"{j}: {Students[i][j]}")
+                elif isinstance(Students[i][j], list):
+                    print("")
+                    print(f"{j}:")
+                    for k in Students[i][j]:
+                        print(f"-{k}")
+                    print("")
+                else:
+                    print(f"{j}:")
+                    for k in Students[i][j]:
+                        print(f"{k}: {Students[i][j][k]}")
+                    print("")
+            print("---------------------------")
+        # break
+    elif choice == "Search":
+        search = input("Enter Student (ID/Name) to search: ").title().strip()
+        if search in Students:
+            for j in Students[search]:
+                if isinstance(Students[search][j], (str, int, float)):
+                    print(f"{j}: {Students[search][j]}")
+                elif isinstance(Students[search][j], list):
+                    print("")
+                    print(f"{j}:")
+                    for k in Students[search][j]:
+                        print(f"-{k}")
+                    print("")
+                else:
+                    print(f"{j}:")
+                    for k in Students[search][j]:
+                        print(f"{k}: {Students[search][j][k]}")
+                    print("")
+            # break
+        else:
+            for id, name in Students.items():
+                if name["Name"] == search:
+                    print(f"found!! {id} -> {name}")
+            # break
+    elif choice == "Update":
+        update = input("Enter Student ID: ").title().strip()
+
+        if update in Students.keys():
+            enter_update = input(f"Enter what to update in {update}: ").strip().title()
+            if enter_update in Students[update]:
+                Students[update][enter_update] = input("Updated value: ").title().strip()
+                print("Updated Successfully!!!")
+                print(Students[update])
+            elif enter_update in Students[id]["Marks"]:
+                Students[update]["Marks"][enter_update] = int(input("Updated marks: "))
+                print(Students[update])
+            else:
+                print(f"Invalid {enter_update}")
+        else:
+            print(f"Invalid ID {update}")
+    elif choice == "Add":
+        n = int(input("How many student: "))
+        for _ in range(n):
+            key = input("enter Student ID: ").title().strip()
+            val_len = int(input("Enter how many values: "))
+            if val_len > 0:
+                Students[key] = {}
+                for _ in range(val_len):
+                    key1 = input("enter key: ").title().strip()
+                    val = int(input("Enter how many values: "))
+                    if val > 0:
+                        if val == 1 and (key1 == "Course" or key1 == "course"):
+                            Students[key][key1] = list(map(str, input("Courses: ").title().split()))
+                        elif val == 1:
+                            Students[key][key1] = input(f"enter {key1} value: ").title().strip()
+                        else:
+                            Students[key][key1] = {}
+                            for _ in range(val):
+                                key2 = input("Enter key: ").title().strip()
+                                Students[key][key1][key2] = int(input(f"Enter {key2} value: "))
+    elif choice == "Delete":
+        delete_id = input("Enter ID to delete: ").title().strip()
+        # for id in Students:
+        if delete_id in Students.keys():
+            Students.pop(delete_id)
+            print("Deleted Successfully!!")
+            print(Students)
+        else:
+            print(f"Invalid ID {delete_id}")
+    else:
+        print("Exit")
+        break
+
+# print(Students)
+print("How many students are taking Python?")
+python = 0
 for i in Students:
+    # print(Students[i]["Course"])
+    if "Python" in Students[i]["Course"]:
+        python += 1
+print("Python: ", python)
+
+print("How many students are taking SQL?")
+py_sql = 0
+for i in Students:
+    if "Python" in Students[i]["Course"] and " Sql" in Students[i]["Course"]:
+        py_sql += 1
+print("Python and SQL: ", py_sql)
+
+print("Which students are taking sql?")
+for i in Students:
+    if " Sql" in Students[i]["Course"]:
+        print(i,"->", Students[i]["Name"])
+
+print("Which students taking sql and python?")
+for i in Students:
+    if "Python" in Students[i]["Course"] and " Sql" in Students[i]["Course"]:
+        print(i,"->", Students[i]["Name"])
+
+print("Which students are taking three or more courses?")
+for i in Students:
+    if len(Students[i]["Course"]) >= 3:
+        print(i,"->", Students[i]["Name"])
+
+print("Get all Students!!")
+for i in Students.items():
     print(i)
-    for j in Students[i].items():
-        print(j)
-        # print("")
-        for k in Students[i][j].items():
-            print(k)
-        # print("")
-    print("")
+
+print("All Students by grade A!!")
+for i in Students:
+    if Students[i]["Grades"] == "A":
+        print(i,"->", Students[i]["Name"])
+
+print("All students with Average above 80!!")
+for i in Students:
+    if Students[i]["Average"] >= 80:
+        print(i,"->", Students[i]["Name"])
+
+print("All Students from Hyderabad")
+for i in Students:
+    if Students[i]["City"] == "Hyderabad":
+        print(i,"->", Students[i]["Name"])
+
+
+print("----------CLASS ANALYTICS -----------")
+print("Total Students")
+total = 0
+for i in Students:
+    total += 1
+print(total)
+
+print("Passed Students")
+passed = 0
+for i in Students:
+    if Students[i]["Status"] == "PASS":
+        passed += 1
+print(passed)
+
+print("Failed Students")
+failed = 0
+for i in Students:
+    if Students[i]["Status"] == "FAIL":
+        failed += 1
+print(failed)
+
+print("Class Average")
+cls_avg = 0
+for i in Students:
+    cls_avg += Students[i]["Average"]
+print(cls_avg/total)
+
+print("Highest Average")
+high_avg = 0
+for i in Students:
+    if Students[i]["Average"] > high_avg:
+        high_avg = Students[i]["Average"]
+print(high_avg)
+
+print("Lowest Average")
+low_avg = high_avg
+for i in Students:
+    if Students[i]["Average"] < low_avg:
+        low_avg = Students[i]["Average"]
+print(low_avg)
+
+print("=================")
+print("Math Average")
+math_avg = 0
+for i in Students:
+    for mark in Students[i]["Marks"]:
+        if mark == "Maths":
+            math_avg += Students[i]["Marks"][mark]
+print(math_avg/total)
+
+print("Science Average")
+sci_avg = 0
+for i in Students:
+    for mark in Students[i]["Marks"]:
+        if mark == "Science":
+            sci_avg += Students[i]["Marks"][mark]
+print(sci_avg/total)
+
+print("English Average")
+eng_avg = 0
+for i in Students:
+    for mark in Students[i]["Marks"]:
+        if mark == "English":
+            eng_avg += Students[i]["Marks"][mark]
+print(eng_avg/total)
+
+print("====================")
+print("Number of A Grade Students")
+gradeA = 0
+for i in Students:
+    if Students[i]["Grades"] == "A":
+        gradeA += 1
+print(gradeA)
+
+print("Number of B Grade Students")
+gradeB = 0
+for i in Students:
+    if Students[i]["Grades"] == "B":
+        gradeB += 1
+print(gradeB)
+
+print("Number of C Grade Students")
+gradeC = 0
+for i in Students:
+    if Students[i]["Grades"] == "C":
+        gradeC += 1
+print(gradeC)
+
+print("Number of D Grade Students")
+gradeD = 0
+for i in Students:
+    if Students[i]["Grades"] == "D":
+        gradeD += 1
+print(gradeD)
+
+print("Number of F Grade Students")
+gradeF = 0
+for i in Students:
+    if Students[i]["Grades"] == "F":
+        gradeF += 1
+print(gradeF)
+
+# -----------------------------------------------------------------------------------------------------------------------------------
+
+
+# {'S001': {'Name': 'Amar', 'City': 'Karimnagar', 'Course': ['Python,', 'Sql,', 'Excel,', 'Bi,', 'Tableau'], 
+#          'Marks': {'Maths': 80, 'Science': 65, 'English': 75},'Total': 220, 'Average': 73.33333333333333, 'Grades': 'C', 'Status': 'PASS'}, 
+# 'S002': {'Name': 'Mahi', 'City': 'Manchiryal', 'Course': ['Python,', 'Excel,', 'Bi,', 'Tableau'], 
+#          'Marks': {'Maths': 80, 'Science': 85, 'English': 90}, 'Total': 255, 'Average': 85.0, 'Grades': 'B', 'Status': 'PASS'}, 
+# 'S003': {'Name': 'Anil', 'City': 'Jagityal', 'Course': ['Python,', 'Sql,', 'Bi,', 'Statistics'], 
+#          'Marks': {'Maths': 70, 'Science': 65, 'English': 35}, 'Total': 170, 'Average': 56.666666666666664, 'Grades': 'F', 'Status': 'FAIL'}, 
+# 'S004': {'Name': 'Raju', 'City': 'Karimnagar', 'Course': ['Python,', 'Sql,', 'Excel,', 'Tableau'], 
+#          'Marks': {'Maths': 70, 'Science': 75, 'English': 58}, 'Total': 203, 'Average': 67.66666666666667, 'Grades': 'D', 'Status': 'PASS'}, 
+# 'S005': {'Name': 'Nikhila', 'City': 'Hyderabad', 'Course': ['Python,', 'Sql,', 'Bi,', 'Tableau'], 
+#          'Marks': {'Maths': 80, 'Science': 95, 'English': 86}, 'Total': 261, 'Average': 87.0, 'Grades': 'B', 'Status': 'PASS'}}
+
+
 
 # hl = {"S001": {"marks": {"math": 12, "sci": 21}}}
 # print(hl["S001"]["marks"].values())
